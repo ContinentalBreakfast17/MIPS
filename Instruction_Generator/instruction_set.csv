@@ -1,0 +1,181 @@
+# http://www_math_unipd_it/~sperduti/ARCHITETTURE-1/mips32_pdf
+# Arithmetic
+abs 			P
+add				R 0x00 rs rt rd 0  0x20
+addu			R 0x00 rs rt rd 0  0x21
+addi			I 0x08 rs rt im
+addiu			I 0x09 rs rt im
+and 			R 0x00 rs rt rd 0  0x24
+andi			I 0x0c rs rt im
+clo				R 0x1c rs 0  rd 0  0x21
+clz 			R 0x1c rs 0  rd 0  0x20
+div 			R 0x00 rs rt 0  0  0x1a
+divu			R 0x00 rs rt 0  0  0x1b
+mult 			R 0x00 rs rt 0  0  0x18
+multu			R 0x00 rs rt 0  0  0x19
+mul 			R 0x1c rs rt rd 0  0x02
+madd 			R 0x1c rs rt 0  0  0x00
+maddu			R 0x1c rs rt 0  0  0x01
+msub 			R 0x1c rs rt 0  0  0x04
+msubu			R 0x1c rs rt 0  0  0x05
+neg 			P
+nor				R 0x00 rs rt rd 0  0x27
+not 			P
+or 				R 0x00 rs rt rd 0  0x25
+ori				I 0x0d rs rt im
+sll				R 0x00 0  rt rd sh 0x00
+sllv			R 0x00 rs rt rd 0  0x04
+sra 			R 0x00 0  rt rd sh 0x07
+srl				R 0x00 0  rt rd sh 0x02
+srlv			R 0x00 rs rt rd 0  0x06
+sub				R 0x00 rs rt rd 0  0x22
+subu			R 0x00 rs rt rd 0  0x23
+xor				R 0x00 rs rt rd 0  0x26
+xori			I 0x0e rs rt im
+
+# Constant-Loading
+lui				I 0x0f 0  rt im
+li 				P
+
+# Comparison Instructions
+slt				R 0x00 rs rt rd 0  0x2a
+sltu 			R 0x00 rs rt rd 0  0x2b
+slti			I 0x0a rs rt im
+sltiu			I 0x0b rs rt im
+sge 			P
+sgt 			P
+
+# Branch Instructions
+b 				P
+bclf 			I 0x11 8  c0 tg
+bclt 			I 0x11 8  c1 tg
+beq				I 0x04 rs rt tg
+bgez			I 0x01 rs 1  tg
+bgezal			I 0x01 rs 17 tg
+bgtz 			I 0x07 rs 0  tg
+blez			I 0x06 rs 0  tg
+bltzal			I 0x01 rs 16 tg
+bltz 			I 0x01 rs 0  tg
+bne 			I 0x05 rs rt tg
+beqz 			P
+bge 			P
+bgeu			P
+bgt 			P
+bgtu			P
+ble 			P
+bleu			P
+blt 			P
+bltu 			P
+bnez			P
+
+# Jump Instructions
+j 				J 0x02 tg
+jal				J 0x03 tg
+jalr			R 0x00 rs 0  rd 0  0x09
+jr 				R 0x00 rs 0  0  0  0x08
+
+# Trap Instructions
+teq				R 0x00 rs rt 0  0  0x34
+teqi			I 0x01 rs 12 im
+tne				R 0x00 rs rt 0  0  0x36
+tnei			I 0x01 rs 14 im
+tge				R 0x00 rs rt 0  0  0x30
+tgeu			R 0x00 rs rt 0  0  0x31
+tgei			I 0x01 rs 8  im
+tgeiu			I 0x01 rs 9  im
+tlt 			R 0x00 rs rt 0  0  0x32
+tltu 			R 0x00 rs rt 0  0  0x33
+tlti			I 0x01 rs 10 im
+tltiu			I 0x01 rs 11 im
+
+# Loading Instructions
+la 				P
+lb				M 0x20 rs rt im tg
+lbu				M 0x24 rs rt im tg
+lh 				M 0x21 rs rt im tg
+lhu				M 0x25 rs rt im tg
+lw 				M 0x23 rs rt im tg
+lwcl			M 0x31 rs rt im tg
+lwl				M 0x22 rs rt im tg
+lwr				M 0x26 rs rt im tg
+ld 				P
+ll 				M 0x30 rs rt im tg
+
+# Store Instructions
+sb 				M 0x28 rs rt im tg
+sh 				M 0x29 rs rt im tg
+sw 				M 0x2b rs rt im tg
+swcl			M 0x31 rs rt im tg
+sdcl			M 0x3d rs rt im tg
+swl				M 0x2a rs rt im tg
+swr				M 0x2e rs rt im tg
+sd 				P
+sc 				M 0x38 rs rt im tg
+
+# Data Movement Instructions
+move 			P
+mfhi 			R 0x00 0  0  rd 0  0x10
+mflo			R 0x00 0  0  rd 0  0x12
+mthi 			R 0x00 rs 0  0  0  0x11
+mtlo			R 0x00 rs 0  0  0  0x13
+mfc0			R 0x10 0  rt rd 0  0x00
+mfc1			R 0x11 0  rt rd 0  0x00
+mfcl_d 			P
+mtc0			R 0x10 4  rt rd 0  0x00
+mtc1			R 0x11 4  rt fs 0  0x00
+movn 			R 0x00 rs rt rd 0  0x0b
+movz 			R 0x00 rs rt rd 0  0x0a
+movf 			R 0x00 rs c0 rd 0  0x01
+movt 			R 0x00 rs c1 rd 0  0x01
+
+# Floating-Point Instructions
+abs_d 			R 0x11 1  0  rs rd 0x05
+abs_s 			R 0x11 0  0  rs rd 0x05
+add_d 			R 0x11 17 rt rs rd 0x00
+add_s 			R 0x11 16 rt rs rd 0x00
+ceil_w_d 		R 0x11 17 0  rs rd 0x0e
+ceil_w_s 		R 0x11 16 0  rs rd 0x0e
+c_eq_d 			R 0x11 17 rt rs c0 0x02
+c_eq_s 			R 0x11 16 rt rs c0 0x02
+c_le_d 			R 0x11 17 rt rs c0 0x0e
+c_le_s 			R 0x11 16 rt rs c0 0x0e
+c_lt_d 			R 0x11 17 rt rs c0 0x0c
+c_lt_s 			R 0x11 16 rt rs c0 0x0c
+cvt_d_s 		R 0x11 16 0  rs rd 0x21
+cvt_d_w 		R 0x11 20 0  rs rd 0x21
+cvt_s_d 		R 0x11 17 0  rs rd 0x20
+cvt_s_w 		R 0x11 20 0  rs rd 0x20
+cvt_w_d 		R 0x11 17 0  rs rd 0x24
+cvt_w_s 		R 0x11 16 0  rs rd 0x24
+div_d 			R 0x11 17 rt rs rd 0x03
+div_s 			R 0x11 16 rt rs rd 0x03
+floor_w_d 		R 0x11 17 0  rs rd 0x0f
+floor_w_s 		R 0x11 16 0  rs rd 0x0f
+mov_d 			R 0x11 17 0  rs rd 0x06
+mov_s 			R 0x11 16 0  rs rd 0x06
+movf_d 			R 0x11 17 c0 rs rd 0x11
+movf_s 			R 0x11 16 c0 rs rd 0x11
+movt_d 			R 0x11 17 c1 rs rd 0x11
+movt_s 			R 0x11 16 c1 rs rd 0x11
+movn_d 			R 0x11 17 rt rs rd 0x13
+movn_s 			R 0x11 16 rt rs rd 0x13
+movz_d 			R 0x11 17 rt rs rd 0x12
+movz_s			R 0x11 16 rt rs rd 0x12
+mul_d 			R 0x11 17 rt rs rd 0x02
+mul_s 			R 0x11 16 rt rs rd 0x02
+neg_d 			R 0x11 17 0  rs rd 0x07
+neg_s 			R 0x11 16 0  rs rd 0x07
+round_w_d 		R 0x11 17 0  rs rd 0x0c
+roudn_w_s 		R 0x11 16 0  rs rd 0x0c
+sqrt_d 			R 0x11 17 0  rs rd 0x04
+sqrt_s 			R 0x11 16 0  rs rd 0x04
+sub_d 			R 0x11 17 rt rs rd 0x01
+sub_s 			R 0x11 16 rt rs rd 0x01
+trunc_w_d 		R 0x11 17 0  rs rd 0x0d
+trunc_w_s 		R 0x11 16 0  rs rd 0x0d
+
+# Exception and Interrupt Instructions
+eret 			R 0x00 16 0  0  0  0x18
+syscall			R 0x00 0  0  0  0  0x0c
+#break 			R 0x00 x  x  x  x  0x0d
+nop 			R 0x00 0  0  0  0  0x00
