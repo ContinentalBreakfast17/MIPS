@@ -12,20 +12,36 @@ PC* init_pc(unsigned int entry_point) {
 /*
 	Returns the counter value
 */
-int get_pc(PC* program_counter) {
+unsigned int get_pc(PC* program_counter) {
 	return program_counter->counter;
 }
 
 /*
 	Increments the program counter by {val}
+	Exits if value is not valid
 */
 int advance_pc(PC* program_counter, int val) {
-	return program_counter->counter += val;
+	int new_counter = program_counter->counter + val;
+	if(new_counter < 0x04000000 || new_counter >= 0x10000000)
+		return -1;
+	program_counter->counter = new_counter;
+	return 0;
 }
 
 /*
 	Sets the program counter to {address}
+	Exits if value is not valid
 */
 int set_pc(PC* program_counter, unsigned int address) {
-	return program_counter->counter = address;
+	if(address < 0x04000000 || address >= 0x10000000)
+		return -1;
+	program_counter->counter = address;
+	return 0;
+}
+
+/*
+	Frees the program counter
+*/
+void free_pc(PC* program_counter) {
+	free(program_counter);
 }

@@ -42,55 +42,6 @@ mips_option     : instruction
                 | TARGET COLON
                 ;
 
-instruction     : SYSCALL 
-                {
-                    new_instruction($1, 0, 0, 0, NULL);
-                }
-                | NOOP
-                {
-                    new_instruction($1, 0, 0, 0, NULL);
-                }
-                | command_rrr reg reg reg
-                {
-                    new_instruction($1, $2, $3, $4, NULL);
-                }
-                | command_rr reg reg
-                {
-                    new_instruction($1, $2, $3, 0, NULL);
-                }
-                | command_r reg
-                {
-                    new_instruction($1, $2, 0, 0, NULL);
-                }
-                | command_rri reg reg IMMEDIATE
-                {
-                    new_instruction($1, $2, $3, $4, NULL);
-                }
-                | command_ri reg IMMEDIATE
-                {
-                    new_instruction($1, $2, $3, 0, NULL);
-                }
-                | command_ror reg IMMEDIATE L_PAREN reg R_PAREN
-                {
-                    new_instruction($1, $2, $3, $5, NULL);
-                }
-                | command_brr reg reg TARGET
-                {
-                    new_instruction($1, $2, $3, 0, $4);
-                }
-                | command_br reg TARGET
-                {
-                    new_instruction($1, $2, 0, 0, $4);
-                }
-                | command_jr reg TARGET
-                {
-                    new_instruction($1, $2, 0, 0, $3);
-                }
-                | command_j TARGET
-                {
-                    new_instruction($1, 0, 0, 0, $2);
-                }
-                ;
 
 
 %%

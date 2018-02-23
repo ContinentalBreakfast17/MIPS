@@ -1,3 +1,4 @@
+%%
 instruction		: ABS rd rs
 				{
 					new_instruction($1, $3, 0, $2, 0, 0, 0, NULL);
@@ -250,7 +251,7 @@ instruction		: ABS rd rs
 				{
 					new_instruction($1, 0, 0, 0, 0, 0, 0, $2);
 				}
-				| JALR rs rd
+				| JALR rs rd // STOPPED HERE
 				{
 					new_instruction($1, $2, 0, $3, 0, 0, 0, NULL);
 				}
@@ -710,3 +711,5 @@ instruction		: ABS rd rs
 				{
 					new_instruction($1, 0, 0, 0, 0, 0, 0, NULL);
 				}
+				;
+%%

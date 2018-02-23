@@ -9,6 +9,6 @@ typedef struct program_counter {
 } PC;
 
 PC* init_pc(unsigned int entry_point);
-int get_pc(PC* program_counter);
+unsigned int get_pc(PC* program_counter);
 int advance_pc(PC* program_counter, int val);
 int set_pc(PC* program_counter, unsigned int address);
