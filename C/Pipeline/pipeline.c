@@ -68,8 +68,8 @@ void* run_thread(void* arg) {
 	T_Data* this = (T_Data*)arg;
 	int(*pipeline_funcs[5])(T_Data*, P_Regs*) = {fetch_instruction, decode_instruction, execute_instruction, memory_instruction, write_back_instruction};
 	int os;
+	pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &os);
 	while(1) {
-		pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &os);
 		int result = 0, wb = this->stage == STAGE_WB;
 
 		if(wb)
@@ -99,11 +99,7 @@ void* run_thread(void* arg) {
 		// Wait for thread synchronization
 		wait_worker(this->barrier);
 
-		// Check for death signal
-		pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &os);
-		pthread_cleanup_push(kill_worker, this->barrier);
-		pthread_testcancel();
-		pthread_cleanup_pop(0);
+		check_death_signal();
 	}
 }
 
@@ -168,7 +164,19 @@ void wait(T_Data* this, int n) {
 	for(i = 0; i < n; i++) {
 		wait_worker(this->barrier);
 		wait_worker(this->barrier);
+		check_death_signal(this);
 	}
+}
+
+/*
+	Checks if thread has been cancelled and cancels if so
+*/
+void check_death_signal(T_Data* this) {
+	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &os);
+	pthread_cleanup_push(kill_worker, this->barrier);
+	pthread_testcancel();
+	pthread_cleanup_pop(0);
+	pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &os);
 }
 
 /*
@@ -260,7 +268,3 @@ int write_back_instruction(T_Data* this) {
 		set_reg(this->regs, mem->rd, wr_data);
 	return 0;
 }
-
-// probably move branch stuff to separate directory
-is_branch();
-resolve_branch();

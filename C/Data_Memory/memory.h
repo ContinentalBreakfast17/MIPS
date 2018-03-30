@@ -1,5 +1,8 @@
 #define MEM_SIZE 0x80000000
 #define INIT_GP  0x10000000
+#define MEM_ALIGN_FORCE 			0
+#define MEM_ALIGN_RIGHT 			1
+#define MEM_ALIGH_LEFT 				2
 
 unsigned char* 	init_memory();
 int 			load_word(unsigned char* data_memory, unsigned int address, void* retval);

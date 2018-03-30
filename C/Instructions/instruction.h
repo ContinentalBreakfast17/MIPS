@@ -1,6 +1,3 @@
-#include "instruction_types.h"
-#include "instruction_opcodes.h"
-
 typedef struct r_inst_data {
 	unsigned int 	opcode1: 	6;
 	unsigned int 	s: 			5;

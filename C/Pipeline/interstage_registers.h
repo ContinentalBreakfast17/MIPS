@@ -9,26 +9,20 @@ typedef struct instruction_fetch {
 } P_IF;
 
 typedef struct instruction_decode {
-	unsigned int 	opcode;		// code of instruction (may need more)
-	unsigned int 	data_1;		// value of rs
-	unsigned int 	data_2;		// value of rt
-	unsigned int 	im; 		// immediate
 	unsigned int 	rd;			// destination register
-	unsigned int 	rs;			// rs
-	unsigned int 	rt;			// rt
-	unsigned int 	alu_src;	// source for alu
 	unsigned int 	mem_rd;		// whether memory will be read
 	unsigned int 	mem_wr;		// whether memory will be written
 	unsigned int 	mem_op_sz;	// size of memory to be read/written, e.g. byte, half, word...
+	unsigned int 	mem_align; 	// whether memory should align by mem_op_sz, or if it is stored/loaded right or left
 	unsigned int 	reg_wr;		// whether register will be written
 	unsigned int 	fp_wr; 		// whether operation writes back to floating point register
-	unsigned int 	fp_op; 		// whether operation uses the floating point processor
 } P_ID;
 
 typedef struct instruction_execute {
 	unsigned int 	alu_result;	// result of alu computation
-	unsigned int 	data_2;
+	unsigned int 	data_2;		// value of rt
 	unsigned int 	mem_op_sz;
+	unsigned int 	mem_align;
 	unsigned int 	rd;
 	unsigned int 	mem_rd;
 	unsigned int 	mem_wr;

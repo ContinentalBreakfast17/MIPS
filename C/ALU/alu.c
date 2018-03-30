@@ -14,7 +14,7 @@ int compute(ALU_Data* data, Hardware* hardware) {
 	unsigned int result = 0;
 	unsigned int long_result = 0;
 
-	switch(data->control) {
+	switch(data->opcode) {
 		/*
 			Begin arithmetic functions
 		*/
@@ -194,6 +194,7 @@ int compute(ALU_Data* data, Hardware* hardware) {
 			break;
 		case ALU_MOVF:
 			result = (get_condition_flag(hardware->condition_flags, data->cc) == 0) ? (arg1) : (get_reg(hardware->registers, data->rd));
+			// else set reg_wr = 0 !
 			break;
 		case ALU_MOVT:
 			result = (get_condition_flag(hardware->condition_flags, data->cc) == 1) ? (arg1) : (get_reg(hardware->registers, data->rd));

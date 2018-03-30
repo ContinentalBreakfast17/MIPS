@@ -1,1 +1,1 @@
-clear_hazards(); // resolve branch here too
+clear_hazards();
