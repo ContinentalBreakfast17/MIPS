@@ -1,11 +1,3 @@
-typedef struct reservation_station_source {
-	pthread_mutex_t* 	lock;
-	pthread_cond_t* 	cond;
-	Data 				value;
-	int 				sleep_count;
-	char 				ready;
-} RS_Source;
-
 typedef struct reservation_station {
 	ALU_Data* 			operation;
 	RS_Source* 			src_1;
@@ -13,10 +5,13 @@ typedef struct reservation_station {
 	Buffer_Entry* 		buffer_entry;
 	Data				val_1;
 	Data				val_2;
-	unsigned int		address;
 	char 				busy;
 } Station;
 
-RS_Source** 	init_sources();
-RS_Source** 	init_f_sources();
-Station** 		init_stations(int size);
+typedef struct reservation_stations {
+	Station** 			list;
+	int 				size;
+} Stations;
+
+Stations* 		new_stations(int size);
+int 			reserve(Station** stations, Instruction* inst);

@@ -9,6 +9,16 @@ void check_alloc(void* p) {
 }
 
 /*
+    Terminates program if result is not 0, useful for checking failed mutex initializations
+*/
+void check_result(int n) {
+    if(n != 0) {
+        printf("Error doing somethin\n");
+        exit(1);
+    }
+}
+
+/*
 	The following 3 functions taken from http://www.sanfoundry.com/c-program-implement-rabin-miller-primality-test-check-number-prime/
 	Used for primality testing
 
