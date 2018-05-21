@@ -8,88 +8,68 @@ unsigned char* init_memory() {
 }
 
 /*
+	Get the direction of the memory operation according to its alignment, either 1 or -1
+*/
+int get_direction(unsigned int alignment) {
+	return (alignment == MEM_ALIGN_RIGHT) ? (-1) : (1);
+}
+
+/*
 	Determines whether or not a given address is in a valid range
 */
-int in_data_range(int address) {
-	if(address < INIT_GP || address >= MEM_SIZE)
-		return 0;
-	return 1;
+int in_data_range(unsigned int address, unsigned int size, unsigned int alignment) {
+	int dir = get_direction(alignment);
+    unsigned int end = address + size*dir - 1*dir;
+    if((address < INIT_GP || address >= MEM_SIZE) && (end < INIT_GP || end >= MEM_SIZE))
+        return 0;
+    return 1;
 }
 
 /*
-	Determines whether an address is suitable by checking alignment and checking if the address is valid
+	Determines whether an address is at the proper alignment for the memory operation
 */
-int good_address(int address, int alignment) {
-	if(address % alignment != 0 || !in_data_range(address)) {
-		printf("Bad data alignment\n");
-		exit(1);
-	}
-	return 1;
+int good_alignment(unsigned int address, unsigned int size, unsigned int alignment) {
+	return !(alignment == MEM_ALIGN_FORCE && (address % size) != 0);
 }
 
 /*
-	Returns the an unsigned int made of the 4 bytes starting from the given address (first byte is MSB)
+	Rights the data to the value pointer
 */
-unsigned int load_word(unsigned char* data_memory, unsigned int address) {
-	if(good_address(address, sizeof(int))) {
-		unsigned int r, i;
-		for(i = 0; i < sizeof(int); i++) {
-			*((char*)&r + (sizeof(int)-1 - i)) = data_memory[address+i];
-		}
-		return r;
-	}
+int load_data(unsigned char* memory, unsigned int address, unsigned long long* value, unsigned int size, unsigned int alignment, unsigned int extend_sign) {
+    // make sure the address is in valid data range and aligns with the data type
+    // TODO: use error codes
+    if(!in_data_range(address, size, alignment) || !good_alignment(address, size, alignment)) return 1;
+
+    int i = 0;
+    int direction = get_direction(alignment);
+    do {
+        int shftamt = (direction == -1) ? (i) : (size-1-i);
+        *((char*)value + shftamt) = memory[address+i*direction];
+        i++;
+    } while((i % size) != 0);
+
+    if(extend_sign && (*value >> (unsigned int)(size*8 - 1))) {
+    	*value = *value | (0xffffffff - (1 << (size*8 - 1)));
+    }
+
+    return 0;
 }
 
 /*
-	Returns the an unsigned short made of the 2 bytes starting from the given address (first byte is MSB)
+    Stores the data according to the parameters
 */
-unsigned short load_half(unsigned char* data_memory, unsigned int address) {
-	if(good_address(address, sizeof(short))) {
-		int i;
-		unsigned short r;
-		for(i = 0; i < sizeof(short); i++) {
-			*((char*)&r + (sizeof(short)-1 - i)) = data_memory[address+i];
-		}
-		return r;
-	}
-}
+int store_data(unsigned char* memory, unsigned int address, unsigned long long value, unsigned int size, unsigned int alignment) {
+    // make sure the address is in valid data range and aligns with the data type
+    // TODO: use error codes
+    if(!in_data_range(address, size, alignment) || !good_alignment(address, size, alignment)) return 1;
+    
+    int i = 0;
+    int direction = get_direction(alignment);
+    do {
+        int shftamt = (direction == -1) ? (i*8) : ((size-1-i)*8);
+        memory[address + i*direction] = (value >> shftamt) & 0xff;
+        i++;
+    } while((i % size) != 0);
 
-/*
-	Returns the unsigned byte at the given address
-*/
-unsigned char load_byte(unsigned char* data_memory, unsigned int address) {
-	if(good_address(address, sizeof(char))) {
-		return data_memory[address];
-	}
-}
-
-/*
-	Stores the given int at the address (first byte is MSB)
-*/
-void store_word(unsigned char* data_memory, unsigned int address, unsigned int value) {
-	if(good_address(address, sizeof(int))) {
-		int i;
-		for(i = 0; i < sizeof(int); i++)
-			data_memory[address+i] = (value >> (sizeof(int)-1-i)*8) & 0xff;
-	}
-}
-
-/*
-	Stores the given short at the address (first byte is MSB)
-*/
-void store_half(unsigned char* data_memory, unsigned int address, unsigned short value) {
-	if(good_address(address, sizeof(int))) {
-		int i;
-		for(i = 0; i < sizeof(short); i++)
-			data_memory[address+i] = (value >> (sizeof(short)-1-i)*8) & 0xff;
-	}
-}
-
-/*
-	Stores the given byte at the address
-*/
-void store_byte(unsigned char* data_memory, unsigned int address, unsigned char value) {
-	if(good_address(address, sizeof(int))) {
-		data_memory[address] = value;
-	}
+    return 0;
 }
