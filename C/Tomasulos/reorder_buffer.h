@@ -7,9 +7,9 @@ typedef struct reorder_buffer_dest {
 	unsigned int 	address;
 	unsigned int 	reg: 			6;
 	unsigned int 	address_calc:	1;
-	unsigned int	fp: 			1;
+	unsigned int	reg_type:		2;
 	unsigned int 	size:	 		4;
-	unsigned int 	mem_alignment:	4;
+	unsigned int 	mem_alignment:	3;
 } Buffer_Dest;
 
 typedef struct reorder_buffer_slot {

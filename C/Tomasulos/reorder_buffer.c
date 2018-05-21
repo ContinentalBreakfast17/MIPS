@@ -100,19 +100,19 @@ void commit_front(Reorder_Buffer* buffer, Hardware* hardware) {
 		handle_exception(entry);
 
 		// store result of store/register
-		if(entry->type & ROB_STORE) {
-			entry->exception = store_data(hardware->memory, entry->dest->address, entry->value.i, entry->dest->size, entry->dest->mem_alignment);
-		} else if((entry->type & ROB_WR) && entry->dest->fp) { 
-			entry->exception = set_f_reg(hardware->f_registers, entry->dest->reg, entry->value.f, entry->dest->size);
-		} else if(entry->type & ROB_WR) {
-			entry->exception = set_reg(hardware->registers, entry->dest->reg, entry->value.i, entry->dest->size);
+		if(entry->type == ROB_STORE) {
+			store_data(hardware->memory, entry->dest->address, entry->value.i, entry->dest->size, entry->dest->mem_alignment);
+		} else if(entry->type == ROB_WR) { 
+			set_reg(hardware->registers, entry->dest->reg_type, entry->dest->size, entry->value);	
 		}
-		handle_exception(entry);	
 
 		// TODO: check mispredicted branch (flush buffer if so)
+		if(entry->type == ROB_BRANCH) {
+
+		}
 
 		// remove entry
-		// TODO: clear register file
+		clear_register_file(hardware->reg_file, entry);
 		dequeue_buffer(buffer);
 		free_buffer_entry(entry);
 	}

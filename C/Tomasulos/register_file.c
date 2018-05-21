@@ -36,17 +36,27 @@ Buffer_Entry* access_register_file(Register_File* reg_file, int fp, int index) {
 /*
 	Stores the ROB entry in the register file at the given index
 */
-void update_register_file(Register_File* reg_file, int fp, int index, Buffer_Entry* entry) {
+void update_register_file(Register_File* reg_file, Buffer_Entry* entry) {
+	int fp = entry->dest->fp;
 	Buffer_Entry** regs = CHOOSE_REGISTER_FILE;
-	regs[index] = entry;
+	regs[entry->dest->reg] = entry;
+
+	if(entry->dest->size == sizeof(long long)) {
+		regs[entry->dest->reg+1] = entry;
+	}
 }
 
 /*
 	Clears the register file of the entry if it is still there
 */
-void clear_register_file(Register_File* reg_file, int fp, int index, Buffer_Entry* entry) {
+void clear_register_file(Register_File* reg_file, Buffer_Entry* entry) {
+	int fp = entry->fp;
 	Buffer_Entry** regs = CHOOSE_REGISTER_FILE;
-	if(regs[index] == entry) {
-		regs[index] = NULL;
+	if(regs[entry->dest->reg] == entry) {
+		regs[entry->dest->reg] = NULL;
+	}
+
+	if(entry->dest->size == sizeof(long long) && regs[entry->dest->reg+1] == entry) {
+		regs[entry->dest->reg+1] = NULL;
 	}
 }
