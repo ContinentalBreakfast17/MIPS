@@ -112,6 +112,7 @@ void commit_front(Reorder_Buffer* buffer, Hardware* hardware) {
 		// TODO: check mispredicted branch (flush buffer if so)
 
 		// remove entry
+		// TODO: clear register file
 		dequeue_buffer(buffer);
 		free_buffer_entry(entry);
 	}
@@ -160,6 +161,6 @@ int can_access_memory(Reorder_Buffer* buffer, Buffer_Entry* this) {
 
 		i = (i + 1) % buffer->capacity;
 	}
-	
+
 	return true;
 }
