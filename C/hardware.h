@@ -9,8 +9,9 @@
 
 typedef struct base_hardware {
 	PC* 			program_counter;
-	int* 			registers;
-	float*			f_registers;
+	Regs* 			registers;
 	unsigned char* 	memory;
-	char* 			condition_flags;
+	Register_File* 	reg_file;
+	Reorder_Buffer* rob;
+	Stations* 		res_stations; 		
 } Hardware;

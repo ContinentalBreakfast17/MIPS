@@ -11,26 +11,53 @@ Station* new_station(int size) {
 /*
 	Initializes the specified number of reservation stations
 */
-Stations* new_stations(int size) {
-	Stations* stations = (Stations*)malloc(sizeof(Stations));
+Station** new_stations_list(int size) {
+	Stations** stations = (Stations**)malloc(sizeof(Station*));
 	check_alloc((void*)stations);
-	stations->list = (Station**)malloc(sizeof(Station*)*size);
-	check_alloc((void*)stations->list);
 	int i;
 	for(i = 0; i < size; i++) {
-		stations->list[i] = new_station();
+		stations[i] = new_station();
 	}
+	return stations;
+}
+
+/*
+	Initializes all reservation stations
+*/
+Stations* init_stations() {
+	Stations* stations = (Stations*)malloc(sizeof(Stations));
+	check_alloc((void*)stations);
+	stations->load = new_stations_list(RS_LOAD_SZ);
+	stations->store = new_stations_list(RS_STORE_SZ);
+	stations->exe = new_stations_list(RS_EXE_SZ);
 	return stations;
 }
 
 /*
 	Returns the first free station or NULL if none are available
 */
-Station* find_free_station(Stations* stations) {
+Station* find_free_station(Stations* stations, int type) {
+	Station** station_list;
+	int size;
+	switch(type) {
+		case LOAD:
+			station_list = stations->load;
+			size = RS_LOAD_SZ;
+			break;
+		case STORE:
+			station_list = stations->store;
+			size = RS_STORE_SZ;
+			break;
+		case EXE:
+			station_list = stations->exe;
+			size = RS_EXE_SZ;
+			break;
+	}
+
 	int i;
-	for(i = 0; i < stations->size; i++) {
-		if(!stations->list[i]->busy) {
-			return stations->list[i];
+	for(i = 0; i < size; i++) {
+		if(!stations_list[i]->busy) {
+			return stations_list[i];
 		}
 	}
 	return NULL;
@@ -44,6 +71,7 @@ int reserve(Stations* stations, Instruction* inst, RS_Source* sources, RS_Source
 	// return nonzero reponse to indicate no free stations
 	if(station == NULL) return 1;
 
+	station->busy = 1;
 	station->src_1 = ;
 	station->src_2 = ;
 

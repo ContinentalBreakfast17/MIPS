@@ -1,3 +1,7 @@
+#define RS_LOAD_SZ	5
+#define RS_STORE_SZ	5
+#define RS_EXE_SZ 	10
+
 typedef struct reservation_station {
 	ALU_Data* 			operation;
 	RS_Source* 			src_1;
@@ -9,9 +13,10 @@ typedef struct reservation_station {
 } Station;
 
 typedef struct reservation_stations {
-	Station** 			list;
-	int 				size;
+	Station** 			load;
+	Station** 			store;
+	Station** 			exe;
 } Stations;
 
-Stations* 		new_stations(int size);
+Stations* 		init_stations();
 int 			reserve(Station** stations, Instruction* inst);
