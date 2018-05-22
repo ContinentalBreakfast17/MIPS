@@ -15,6 +15,7 @@ void r_type_2(unsigned int code, Inst_Bits inst, Inst* data, int branch) {
 	data->opcode = code;
 	data->op_1 = new_operand(OP_I_REG, inst.r->rs, SZ_WORD);
 	data->dest = new_dest(OP_I_REG, inst.r->rd, SZ_WORD, MEM_ALIGN_FORCE);
+	data->branch = branch;
 }
 
 // sll, sra, srl
@@ -30,6 +31,7 @@ void r_type_3(unsigned int code, Inst_Bits inst, Inst* data) {
 void r_type_4(unsigned int code, Inst_Bits inst, Inst* data) {
 	data->opcode = code;
 	data->op_1 = new_operand(OP_I_REG, inst.r->rs, SZ_WORD);
+	data->branch = 1;
 }
 
 // teq, tne, tge, tgeu, tlt, tltu
